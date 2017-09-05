@@ -33,4 +33,5 @@ dependencies {
 
 
     compile project(':indicators')
+    //compile 'net.alexandroid.utils:indicators:1.1'
 }
