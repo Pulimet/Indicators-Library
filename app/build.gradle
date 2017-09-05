@@ -30,4 +30,7 @@ dependencies {
     })
 
     compile 'net.alexandroid.utils:shpref:1.5'
+
+
+    compile project(':indicators')
 }
