@@ -29,6 +29,7 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     private Bitmap mSelectedBitmap;
 
     private Rect mRect;
+    private Rect mTempRect;
 
     // Default size
     private int mIndicatorSize = 13;
@@ -46,6 +47,9 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     private ViewPager mViewPager;
 
     private OnIndicatorClickListener mOnIndicatorClickListener;
+    private boolean mSmoothTransitionEnabled;
+    private float mCurrentPositionOffset;
+    private float mCurrentPoistion;
 
     public IndicatorsView(Context context) {
         this(context, null);
@@ -60,6 +64,8 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
         setDefaults(context);
         getDataFromAttributes(context, attrs);
         convertDrawablesToBitmaps();
+
+        mTempRect = new Rect();
     }
 
     private void setDefaults(Context context) {
@@ -148,10 +154,25 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
 
         mRect.offsetTo(mLeftBound, mTopBound);
         for (int i = 0; i < mNumOfIndicators; i++) {
-            canvas.drawBitmap(i == mSelectedIndicator ? mSelectedBitmap : mUnSelectedBitmap,
-                    null, mRect, null);
+            if (i != mSelectedIndicator || mSmoothTransitionEnabled) {
+                canvas.drawBitmap(mUnSelectedBitmap, null, mRect, null);
+            } else {
+                canvas.drawBitmap(mSelectedBitmap, null, mRect, null);
+            }
+
+            if (i == mCurrentPoistion && mSmoothTransitionEnabled) {
+                mTempRect.set(mRect);
+            }
+
             mRect.offset(mIndicatorSize + mPaddingBetweenIndicators, 0);
         }
+
+        if (mSmoothTransitionEnabled) {
+            int offset = Math.round((mIndicatorSize + mPaddingBetweenIndicators) * mCurrentPositionOffset);
+            mTempRect.offset(offset, 0);
+            canvas.drawBitmap(mSelectedBitmap, null, mTempRect, null);
+        }
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -255,6 +276,11 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
         invalidate();
     }
 
+    public void setSmoothTransition(boolean newValue) {
+        mSmoothTransitionEnabled = newValue;
+    }
+
+
     public void setIndicatorsClickChangePage(boolean newValue) {
         mIndicatorsClickChangePage = newValue;
     }
@@ -266,7 +292,13 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     // ViewPager
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+        Log.d("ZAQ", "position: " + position + "  positionOffset: " +
+                positionOffset + " positionOffsetPixels: " + positionOffsetPixels);
+        if (mSmoothTransitionEnabled) {
+            mCurrentPositionOffset = positionOffset;
+            mCurrentPoistion = position;
+            invalidate();
+        }
     }
 
     @Override

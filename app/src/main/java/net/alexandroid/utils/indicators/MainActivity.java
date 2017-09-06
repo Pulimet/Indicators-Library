@@ -9,8 +9,8 @@ import android.view.View;
 
 import net.alexandroid.shpref.MyLog;
 
-// TODO 1. Option to make them  clickable and change the page or get the event out
-// TODO 2. Enhance circle movement
+// TODO 1. Enhance circle movement
+// TODO 2. Remove logs from library
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         mIndicatorsView = findViewById(R.id.indicatorsView);
         mIndicatorsView.setViewPager(viewPager);
+        mIndicatorsView.setSmoothTransition(true);
         mIndicatorsView.setIndicatorsClickChangePage(true);
         mIndicatorsView.setIndicatorsClickListener(new IndicatorsView.OnIndicatorClickListener() {
             @Override
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
                 MyLog.d("Click on: "+ indicatorNumber);
             }
         });
+
+
 
     }
 

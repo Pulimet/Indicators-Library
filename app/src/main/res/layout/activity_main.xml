@@ -47,13 +47,13 @@
         <net.alexandroid.utils.indicators.IndicatorsView
             android:id="@+id/indicatorsView"
             android:layout_width="0dp"
-            android:layout_height="100dp"
+            android:layout_height="60dp"
             app:indicatorSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:numberOfIndicators="10"
-            app:paddingBetweenIndicators="23dp"
+            app:paddingBetweenIndicators="16dp"
             app:selectedIndicator="5"/>
     </android.support.constraint.ConstraintLayout>
 
