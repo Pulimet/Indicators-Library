@@ -108,7 +108,6 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     }
 
     private void convertDrawablesToBitmaps() {
-
         mRect = new Rect(0, 0, mIndicatorSize, mIndicatorSize);
         mUnSelectedBitmap = drawableToBitmap(mUnSelectedDrawable, mIndicatorSize);
         mSelectedBitmap = drawableToBitmap(mSelectedDrawable, mIndicatorSize);
@@ -116,19 +115,48 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int desiredWidth = mIndicatorSize * mNumOfIndicators + mPaddingBetweenIndicators * (mNumOfIndicators - 1);
+        int desiredHeight = mIndicatorSize;
+
+        int width = desiredWidth;
+        int height = desiredHeight;
+
+
+        //Measure Width
+        if (widthMode == MeasureSpec.EXACTLY) {
+            width = widthSize;  // Must be this size (match_parent or exactly value)
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            width = Math.min(desiredWidth, widthSize); // (wrap_content)
+        }
+
+        //Measure Height
+        if (heightMode == MeasureSpec.EXACTLY) {
+            height = heightSize; // Must be this size (match_parent or exactly value)
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            height = Math.min(desiredHeight, heightSize);   // (wrap_content)
+        }
+
+        changeIndicatorSizeIfNecessary(width, height);
+
+        setMeasuredDimension(width, height);
+    }
+
+    private void changeIndicatorSizeIfNecessary(int width, int height) {
         boolean isIndicatorSizeChanged = false;
 
-        int width = getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec);
-        final int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
-
-
+        // if width is not wide enough
         if (mIndicatorSize * mNumOfIndicators + (mNumOfIndicators - 1) * mPaddingBetweenIndicators > width) {
             width -= mPaddingBetweenIndicators * (mNumOfIndicators - 1);
             mIndicatorSize = width / mNumOfIndicators;
             isIndicatorSizeChanged = true;
         }
 
-
+        // if height is not high enough
         if (mIndicatorSize > height) {
             mIndicatorSize = height;
             isIndicatorSizeChanged = true;
@@ -137,8 +165,6 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
         if (isIndicatorSizeChanged) {
             convertDrawablesToBitmaps();
         }
-
-        setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override

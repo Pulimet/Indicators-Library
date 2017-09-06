@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // usable when viewpager is not attached
+        //mIndicatorsView.setSelectedIndicator(2);
     }
 
     private void setFab() {
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mIndicatorsView.setSelectedIndicator(2);
+
             }
         });
     }

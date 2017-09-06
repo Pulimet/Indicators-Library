@@ -9,11 +9,11 @@
         <attr name="selectedIndicator" format="integer"/>
 
         <!-- ### -->
-        <attr name="testColor" format="color"/>
+<!--    <attr name="testColor" format="color"/>
         <attr name="testInteger" format="integer"/>
         <attr name="testReference" format="reference"/>
         <attr name="testDimension" format="dimension"/>
-        <attr name="testBoolean" format="boolean"/>
+        <attr name="testBoolean" format="boolean"/>-->
     </declare-styleable>
 
 </resources>

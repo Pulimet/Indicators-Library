@@ -46,14 +46,21 @@
 
         <net.alexandroid.utils.indicators.IndicatorsView
             android:id="@+id/indicatorsView"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            app:indicatorSize="20dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:numberOfIndicators="10"
+
+            app:indicatorSize="20dp"
             app:paddingBetweenIndicators="16dp"
+
+            app:selectedDrawable="@drawable/custom_selected"
+            app:unSelectedDrawable="@drawable/custom_unselected"
+
+            app:numberOfIndicators="10"
             app:selectedIndicator="5"/>
     </android.support.constraint.ConstraintLayout>
 
