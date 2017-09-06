@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import net.alexandroid.shpref.MyLog;
+
 // TODO 1. Option to make them  clickable and change the page or get the event out
 // TODO 2. Enhance circle movement
 
@@ -29,8 +31,14 @@ public class MainActivity extends AppCompatActivity {
         setFab();
 
         mIndicatorsView = findViewById(R.id.indicatorsView);
-
         mIndicatorsView.setViewPager(viewPager);
+        mIndicatorsView.setIndicatorsClickChangePage(true);
+        mIndicatorsView.setIndicatorsClickListener(new IndicatorsView.OnIndicatorClickListener() {
+            @Override
+            public void onClick(int indicatorNumber) {
+                MyLog.d("Click on: "+ indicatorNumber);
+            }
+        });
 
     }
 

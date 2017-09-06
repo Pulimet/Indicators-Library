@@ -1,5 +1,6 @@
 package net.alexandroid.utils.indicators;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -11,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -19,8 +22,8 @@ import android.view.View;
 
 public class IndicatorsView extends View implements ViewPager.OnPageChangeListener {
 
-    private Drawable mSelectedDrawbale;
-    private Drawable mUnSelectedDrawbale;
+    private Drawable mSelectedDrawable;
+    private Drawable mUnSelectedDrawable;
 
     private Bitmap mUnSelectedBitmap;
     private Bitmap mSelectedBitmap;
@@ -35,6 +38,14 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
 
     private int mNumOfIndicators = 3;
     private int mSelectedIndicator = 0;
+
+    private int mLeftBound;
+    private int mTopBound;
+    private int mTotalWidthWeNeed;
+    private boolean mIndicatorsClickChangePage;
+    private ViewPager mViewPager;
+
+    private OnIndicatorClickListener mOnIndicatorClickListener;
 
     public IndicatorsView(Context context) {
         this(context, null);
@@ -57,8 +68,8 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
         mIndicatorSize = (int) (mIndicatorSize * density);
         mPaddingBetweenIndicators = (int) (mPaddingBetweenIndicators * density);
 
-        mSelectedDrawbale = ContextCompat.getDrawable(context, R.drawable.circle_selected);
-        mUnSelectedDrawbale = ContextCompat.getDrawable(context, R.drawable.circle_unselected);
+        mSelectedDrawable = ContextCompat.getDrawable(context, R.drawable.circle_selected);
+        mUnSelectedDrawable = ContextCompat.getDrawable(context, R.drawable.circle_unselected);
     }
 
     private void getDataFromAttributes(Context context, @Nullable AttributeSet attrs) {
@@ -68,11 +79,11 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
             // Get indicators if exist
             Drawable selectedDrawable = a.getDrawable(R.styleable.IndicatorsView_selectedDrawable);
             if (selectedDrawable != null) {
-                mSelectedDrawbale = selectedDrawable;
+                mSelectedDrawable = selectedDrawable;
             }
             Drawable unSelectedDrawable = a.getDrawable(R.styleable.IndicatorsView_unSelectedDrawable);
             if (unSelectedDrawable != null) {
-                mUnSelectedDrawbale = unSelectedDrawable;
+                mUnSelectedDrawable = unSelectedDrawable;
             }
 
             // Get indicator size
@@ -94,8 +105,8 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     private void convertDrawablesToBitmaps() {
 
         mRect = new Rect(0, 0, mIndicatorSize, mIndicatorSize);
-        mUnSelectedBitmap = drawableToBitmap(mUnSelectedDrawbale, mIndicatorSize);
-        mSelectedBitmap = drawableToBitmap(mSelectedDrawbale, mIndicatorSize);
+        mUnSelectedBitmap = drawableToBitmap(mUnSelectedDrawable, mIndicatorSize);
+        mSelectedBitmap = drawableToBitmap(mSelectedDrawable, mIndicatorSize);
     }
 
     @Override
@@ -131,11 +142,11 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     protected void onDraw(Canvas canvas) {
         final int hCenter = getWidth() / 2;
         final int vCenter = getHeight() / 2;
-        final int totalWidthWeNeed = mIndicatorSize * mNumOfIndicators + mPaddingBetweenIndicators * (mNumOfIndicators - 1);
-        final int leftBound = hCenter - totalWidthWeNeed / 2;
-        final int topBound = vCenter - mIndicatorSize / 2;
+        mTotalWidthWeNeed = mIndicatorSize * mNumOfIndicators + mPaddingBetweenIndicators * (mNumOfIndicators - 1);
+        mLeftBound = hCenter - mTotalWidthWeNeed / 2;
+        mTopBound = vCenter - mIndicatorSize / 2;
 
-        mRect.offsetTo(leftBound, topBound);
+        mRect.offsetTo(mLeftBound, mTopBound);
         for (int i = 0; i < mNumOfIndicators; i++) {
             canvas.drawBitmap(i == mSelectedIndicator ? mSelectedBitmap : mUnSelectedBitmap,
                     null, mRect, null);
@@ -143,6 +154,72 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        if (mIndicatorsClickChangePage && mOnIndicatorClickListener != null) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    break;
+                case MotionEvent.ACTION_UP:
+                    int x = (int) event.getX();
+                    int y = (int) event.getY();
+                    int indicatorNumberClicked = getNumberOfCLickedIndicator(x, y);
+                    //Log.d("ZAQ", "x: " + x + "  y: " + y);
+                    Log.d("ZAQ", "Clicked on: " + indicatorNumberClicked);
+                    if (indicatorNumberClicked > -1) {
+                        onIndicatorClick(indicatorNumberClicked);
+                    }
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    break;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private int getNumberOfCLickedIndicator(int x, int y) {
+        if (y < mTopBound - mIndicatorSize
+                || y > (mTopBound + mIndicatorSize)
+                || x < mLeftBound - mPaddingBetweenIndicators / 2
+                || x > (mLeftBound + mTotalWidthWeNeed)) {
+            return -1;
+        }
+
+        int x2 = x - mLeftBound;
+        final int firstIndicatorWidth = mIndicatorSize + mPaddingBetweenIndicators / 2;
+
+        if (x2 < firstIndicatorWidth) {
+            return 0;
+        }
+
+        int count = 1;
+        x2 -= firstIndicatorWidth;
+        final int indicatorWidth = mIndicatorSize + mPaddingBetweenIndicators;
+
+        while (x2 > indicatorWidth) {
+            count++;
+            x2 -= indicatorWidth;
+        }
+
+        return count;
+    }
+
+    private void onIndicatorClick(int indicatorNumberClicked) {
+        if (mIndicatorsClickChangePage && mViewPager != null) {
+            mViewPager.setCurrentItem(indicatorNumberClicked);
+        }
+
+        if (mOnIndicatorClickListener != null) {
+            mOnIndicatorClickListener.onClick(indicatorNumberClicked);
+        }
+    }
+
+    // Helper
     public static Bitmap drawableToBitmap(Drawable drawable, int size) {
 
         if (drawable instanceof BitmapDrawable) {
@@ -161,23 +238,32 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
         return bitmap;
     }
 
-    // Control
 
+    // Control
     public void setSelectedIndicator(int selectedIndicator) {
         mSelectedIndicator = selectedIndicator;
         invalidate();
     }
 
     public void setViewPager(ViewPager viewPager) {
-        mNumOfIndicators = viewPager.getAdapter().getCount();
-        mSelectedIndicator = viewPager.getCurrentItem();
-        viewPager.addOnPageChangeListener(this);
+        mViewPager = viewPager;
+
+        mNumOfIndicators = mViewPager.getAdapter().getCount();
+        mSelectedIndicator = mViewPager.getCurrentItem();
+        mViewPager.addOnPageChangeListener(this);
+
         invalidate();
     }
 
+    public void setIndicatorsClickChangePage(boolean newValue) {
+        mIndicatorsClickChangePage = newValue;
+    }
+
+    public void setIndicatorsClickListener(OnIndicatorClickListener listener) {
+        mOnIndicatorClickListener = listener;
+    }
+
     // ViewPager
-
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -192,4 +278,10 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     public void onPageScrollStateChanged(int state) {
 
     }
+
+    // Click listener interface
+    public interface OnIndicatorClickListener {
+        void onClick(int indicatorNumber);
+    }
+
 }
