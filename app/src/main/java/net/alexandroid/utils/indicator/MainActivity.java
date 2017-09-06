@@ -10,8 +10,6 @@ import android.view.View;
 import net.alexandroid.shpref.MyLog;
 import net.alexandroid.utils.indicators.IndicatorsView;
 
-// TODO 1. UI more colorized + screenshot for readme file
-
 public class MainActivity extends AppCompatActivity {
 
     private IndicatorsView mIndicatorsView;

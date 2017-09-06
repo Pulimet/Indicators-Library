@@ -5,7 +5,7 @@
                                              android:layout_width="match_parent"
                                              android:layout_height="match_parent"
                                              android:background="#EEEEEE"
-                                             tools:context="net.alexandroid.utils.indicators.PlaceholderFragment">
+                                             tools:context="net.alexandroid.utils.indicator.PlaceholderFragment">
 
     <TextView
         android:id="@+id/section_label"
