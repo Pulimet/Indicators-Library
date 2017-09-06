@@ -1,4 +1,4 @@
-package net.alexandroid.utils.indicators;
+package net.alexandroid.utils.indicator;
 
 import android.app.Application;
 

@@ -54,6 +54,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
 
+            android:padding="20dp"
+
             app:indicatorSize="20dp"
             app:paddingBetweenIndicators="16dp"
 
@@ -61,7 +63,8 @@
             app:unSelectedDrawable="@drawable/custom_unselected"
 
             app:numberOfIndicators="10"
-            app:selectedIndicator="5"/>
+            app:selectedIndicator="5"
+      />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.FloatingActionButton

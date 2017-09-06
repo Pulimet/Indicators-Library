@@ -1,4 +1,4 @@
-package net.alexandroid.utils.indicators;
+package net.alexandroid.utils.indicator;
 
 
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 
 /**
  * A placeholder fragment containing a simple view.

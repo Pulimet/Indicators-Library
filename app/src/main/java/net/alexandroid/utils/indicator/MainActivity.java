@@ -1,4 +1,4 @@
-package net.alexandroid.utils.indicators;
+package net.alexandroid.utils.indicator;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,9 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import net.alexandroid.shpref.MyLog;
+import net.alexandroid.utils.indicators.IndicatorsView;
 
-// TODO 1. Enhance circle movement
-// TODO 2. Remove logs from library
+// TODO 1. UI more colorized + screenshot for readme file
 
 public class MainActivity extends AppCompatActivity {
 
