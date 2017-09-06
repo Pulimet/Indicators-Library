@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     private void setFab() {
@@ -51,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mIndicatorsView.setSelectedIndicator(2);
-         /*       Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
             }
         });
     }

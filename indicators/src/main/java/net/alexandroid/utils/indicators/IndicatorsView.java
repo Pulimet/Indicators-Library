@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -129,14 +128,12 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
             isIndicatorSizeChanged = true;
         }
 
-        //MyLog.d("mIndicatorSize: " + mIndicatorSize);
 
         if (mIndicatorSize > height) {
             mIndicatorSize = height;
             isIndicatorSizeChanged = true;
         }
 
-        //MyLog.d("mIndicatorSize: " + mIndicatorSize);
         if (isIndicatorSizeChanged) {
             convertDrawablesToBitmaps();
         }
@@ -189,8 +186,6 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
                     int x = (int) event.getX();
                     int y = (int) event.getY();
                     int indicatorNumberClicked = getNumberOfCLickedIndicator(x, y);
-                    //Log.d("ZAQ", "x: " + x + "  y: " + y);
-                    Log.d("ZAQ", "Clicked on: " + indicatorNumberClicked);
                     if (indicatorNumberClicked > -1) {
                         onIndicatorClick(indicatorNumberClicked);
                     }
@@ -292,8 +287,6 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     // ViewPager
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        Log.d("ZAQ", "position: " + position + "  positionOffset: " +
-                positionOffset + " positionOffsetPixels: " + positionOffsetPixels);
         if (mSmoothTransitionEnabled) {
             mCurrentPositionOffset = positionOffset;
             mCurrentPoistion = position;
