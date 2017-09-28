@@ -1,6 +1,7 @@
-[ ![Download](https://api.bintray.com/packages/pulimet/utils/indicators/images/download.svg) ](https://bintray.com/pulimet/utils/indicators/_latestVersion)      [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[ ![Download](https://api.bintray.com/packages/pulimet/utils/indicators/images/download.svg) ](https://bintray.com/pulimet/utils/indicators/_latestVersion)      [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)    [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Indicators-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/6177)
 
 <img align="right" src="https://raw.githubusercontent.com/Pulimet/Indicators-Library/master/art/demo2.gif">
+
 # Indicators-Library
 
 Indicators is custom view that indicates selected page.
@@ -74,7 +75,7 @@ mIndicatorsView.setSelectedIndicator(2);
 # License
 
 ```
-Copyright 2016 Alexey Korolev
+Copyright 2017 Alexey Korolev
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
