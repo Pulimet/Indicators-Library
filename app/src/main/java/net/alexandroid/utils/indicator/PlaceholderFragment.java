@@ -1,6 +1,7 @@
 package net.alexandroid.utils.indicator;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -14,12 +15,14 @@ import android.widget.TextView;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends Fragment {
+public class PlaceholderFragment extends Fragment implements View.OnClickListener {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    private CategoryFragmentInteractionListener mListener;
 
     public PlaceholderFragment() {
     }
@@ -44,13 +47,33 @@ public class PlaceholderFragment extends Fragment {
         int section = getArguments().getInt(ARG_SECTION_NUMBER);
         textView.setText(getString(R.string.section_format, section));
 
+
+        rootView.findViewById(R.id.btnSelected).setOnClickListener(this);
+        rootView.findViewById(R.id.btnUnselected).setOnClickListener(this);
+        rootView.findViewById(R.id.btnSetBackground).setOnClickListener(this);
+
         ConstraintLayout constraintLayout = rootView.findViewById(R.id.constraintLayout);
         constraintLayout.setBackgroundColor(getColor(section));
         return rootView;
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnSelected:
+                mListener.onSetDrawableToSelectedIndicator();
+                break;
+            case R.id.btnUnselected:
+                mListener.onSetDrawableToUnSelectedIndicator();
+                break;
+            case R.id.btnSetBackground:
+                mListener.onSetBackgroundColor();
+                break;
+        }
+    }
+
     private int getColor(int section) {
-        switch (section){
+        switch (section) {
             case 1:
                 return getResources().getColor(R.color.color1);
             case 2:
@@ -68,5 +91,39 @@ public class PlaceholderFragment extends Fragment {
             default:
                 return Color.WHITE;
         }
+    }
+
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     */
+    @SuppressWarnings("SameParameterValue")
+    public interface CategoryFragmentInteractionListener {
+        void onSetDrawableToSelectedIndicator();
+
+        void onSetDrawableToUnSelectedIndicator();
+
+        void onSetBackgroundColor();
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof CategoryFragmentInteractionListener) {
+            mListener = (CategoryFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement CategoryFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 }

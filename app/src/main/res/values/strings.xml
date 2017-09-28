@@ -2,4 +2,7 @@
     <string name="app_name">Indicators</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="drawable_to_selected_indicator">Drawable To Selected Indicator</string>
+    <string name="drawable_to_unselected_indicator">Drawable To UnSelected Indicator</string>
+    <string name="set_background">Set Background</string>
 </resources>

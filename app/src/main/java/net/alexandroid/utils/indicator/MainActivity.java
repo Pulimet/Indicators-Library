@@ -1,5 +1,6 @@
 package net.alexandroid.utils.indicator;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
@@ -10,7 +11,7 @@ import android.view.View;
 import net.alexandroid.shpref.MyLog;
 import net.alexandroid.utils.indicators.IndicatorsView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PlaceholderFragment.CategoryFragmentInteractionListener {
 
     private IndicatorsView mIndicatorsView;
 
@@ -35,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
         mIndicatorsView.setIndicatorsClickListener(new IndicatorsView.OnIndicatorClickListener() {
             @Override
             public void onClick(int indicatorNumber) {
-                MyLog.d("Click on: "+ indicatorNumber);
+                MyLog.d("Click on: " + indicatorNumber);
             }
         });
+
+        //mIndicatorsView.setBackgroundColor();
 
         // usable when viewpager is not attached
         //mIndicatorsView.setSelectedIndicator(2);
@@ -55,4 +58,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //CategoryFragmentInteractionListener
+    @Override
+    public void onSetDrawableToSelectedIndicator() {
+        mIndicatorsView.setSelectedDrawable(getResources().getDrawable(R.drawable.custom_selected2));
+    }
+
+    @Override
+    public void onSetDrawableToUnSelectedIndicator() {
+        mIndicatorsView.setUnSelectedDrawable(getResources().getDrawable(R.drawable.custom_unselected2));
+    }
+
+    @Override
+    public void onSetBackgroundColor() {
+        mIndicatorsView.setBackgroundColor(Color.YELLOW);
+        //mIndicatorsView.setBackGroudColr(getResources().getDrawable(R.drawable.custom_selected2));
+    }
 }

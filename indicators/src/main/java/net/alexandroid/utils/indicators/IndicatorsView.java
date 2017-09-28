@@ -337,6 +337,18 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
 
     }
 
+    public void setSelectedDrawable(Drawable drawable) {
+        mSelectedDrawable = drawable;
+        convertDrawablesToBitmaps();
+        invalidate();
+    }
+
+    public void setUnSelectedDrawable(Drawable drawable) {
+        mUnSelectedDrawable = drawable;
+        convertDrawablesToBitmaps();
+        invalidate();
+    }
+
     // Click listener interface
     public interface OnIndicatorClickListener {
         void onClick(int indicatorNumber);
