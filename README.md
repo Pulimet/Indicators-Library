@@ -16,13 +16,14 @@ repositories {
 }
 
 dependencies {
-    compile 'net.alexandroid.utils:indicators:1.3'
+    compile 'net.alexandroid.utils:indicators:1.4'
 }
 ```
 
 
 
 # Release notes
+* 1.4 - New drawables setters for selected and unselected indicators
 * 1.3 - Wrap content and padding support
 * 1.2 - Smooth indicator change and clickabillity
 
@@ -66,6 +67,9 @@ mIndicatorsView.setIndicatorsClickListener(new IndicatorsView.OnIndicatorClickLi
         MyLog.d("Click on: "+ indicatorNumber);
     }
 });
+
+mIndicatorsView.setSelectedDrawable(someDrawable);
+mIndicatorsView.setUnSelectedDrawable(someDrawable);
 
 // usable when viewpager is not attached
 mIndicatorsView.setSelectedIndicator(2);
