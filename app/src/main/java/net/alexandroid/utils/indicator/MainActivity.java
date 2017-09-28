@@ -72,6 +72,5 @@ public class MainActivity extends AppCompatActivity implements PlaceholderFragme
     @Override
     public void onSetBackgroundColor() {
         mIndicatorsView.setBackgroundColor(Color.YELLOW);
-        //mIndicatorsView.setBackGroudColr(getResources().getDrawable(R.drawable.custom_selected2));
     }
 }
