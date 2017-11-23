@@ -130,8 +130,8 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
 
         int desiredWidth = mIndicatorSize * mNumOfIndicators
                 + mPaddingBetweenIndicators * (mNumOfIndicators - 1)
-                + mIndicatorSelectedSize - mIndicatorSelectedSize;
-        int desiredHeight = mIndicatorSize;
+                + mIndicatorSelectedSize - mIndicatorSize;
+        int desiredHeight = Math.max(mIndicatorSize, mIndicatorSelectedSize);
 
         desiredWidth += getPaddingLeft() + getPaddingRight();
         desiredHeight += getPaddingTop() + getPaddingBottom();
@@ -203,6 +203,13 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
         mRect.offsetTo(mLeftBound, mTopBound);
         mSelectedRect.offsetTo(mLeftBound, topSelectedBound);
         for (int i = 0; i < mNumOfIndicators; i++) {
+            int offset = 0;
+
+            //Log.e("ZAQ", "mSelectedIndicator: " + mSelectedIndicator + " mCurrentPosition: " + mCurrentPosition);
+            if (i == mSelectedIndicator) {
+                offset = mIndicatorSelectedSize - mIndicatorSize;
+            }
+
             if (i != mSelectedIndicator || mSmoothTransitionEnabled) {
                 canvas.drawBitmap(mUnSelectedBitmap, null, mRect, null);
             } else {
@@ -213,8 +220,9 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
                 mTempRect.set(mSelectedRect);
             }
 
-            mRect.offset(mIndicatorSize + mPaddingBetweenIndicators, 0);
-            mSelectedRect.offset(mIndicatorSize + mPaddingBetweenIndicators, 0);
+            mRect.offset(mIndicatorSize + offset + mPaddingBetweenIndicators, 0);
+            mSelectedRect.offset(mIndicatorSize + offset + mPaddingBetweenIndicators, 0);
+
         }
 
         if (mSmoothTransitionEnabled) {
