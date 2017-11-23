@@ -32,6 +32,7 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
 
     // Default size
     private int mIndicatorSize = 13;
+    private int mIndicatorSelectedSize = 13;
 
     // Default padding between indicators
     private int mPaddingBetweenIndicators = 7;
@@ -49,7 +50,7 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     private boolean mSmoothTransitionEnabled;
     private float mCurrentPositionOffset;
     private float mCurrentPosition;
-    private float mDensity;
+    private Rect mSelectedRect;
 
     public IndicatorsView(Context context) {
         this(context, null);
@@ -69,10 +70,12 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     }
 
     private void setDefaults(Context context) {
-        mDensity = getResources().getDisplayMetrics().density;
+        float density = getResources().getDisplayMetrics().density;
 
-        mIndicatorSize = (int) (mIndicatorSize * mDensity);
-        mPaddingBetweenIndicators = (int) (mPaddingBetweenIndicators * mDensity);
+        mIndicatorSize = (int) (mIndicatorSize * density);
+        mIndicatorSelectedSize = (int) (mIndicatorSelectedSize * density);
+
+        mPaddingBetweenIndicators = (int) (mPaddingBetweenIndicators * density);
 
         mSelectedDrawable = ContextCompat.getDrawable(context, R.drawable.circle_selected);
         mUnSelectedDrawable = ContextCompat.getDrawable(context, R.drawable.circle_unselected);
@@ -94,6 +97,7 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
 
             // Get indicator size
             mIndicatorSize = (int) a.getDimension(R.styleable.IndicatorsView_indicatorSize, mIndicatorSize);
+            mIndicatorSelectedSize = (int) a.getDimension(R.styleable.IndicatorsView_indicatorSelectedSize, mIndicatorSize);
 
             // Get padding between indicators
             mPaddingBetweenIndicators = (int) a.getDimension(R.styleable.IndicatorsView_paddingBetweenIndicators, mPaddingBetweenIndicators);
@@ -111,7 +115,9 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     private void convertDrawablesToBitmaps() {
         mRect = new Rect(0, 0, mIndicatorSize, mIndicatorSize);
         mUnSelectedBitmap = drawableToBitmap(mUnSelectedDrawable, mIndicatorSize);
-        mSelectedBitmap = drawableToBitmap(mSelectedDrawable, mIndicatorSize);
+
+        mSelectedRect = new Rect(0, 0, mIndicatorSelectedSize, mIndicatorSelectedSize);
+        mSelectedBitmap = drawableToBitmap(mSelectedDrawable, mIndicatorSelectedSize);
     }
 
     @Override
@@ -122,7 +128,9 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
 
-        int desiredWidth = mIndicatorSize * mNumOfIndicators + mPaddingBetweenIndicators * (mNumOfIndicators - 1);
+        int desiredWidth = mIndicatorSize * mNumOfIndicators
+                + mPaddingBetweenIndicators * (mNumOfIndicators - 1)
+                + mIndicatorSelectedSize - mIndicatorSelectedSize;
         int desiredHeight = mIndicatorSize;
 
         desiredWidth += getPaddingLeft() + getPaddingRight();
@@ -154,9 +162,13 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     private void changeIndicatorSizeIfNecessary(int width, int height) {
         boolean isIndicatorSizeChanged = false;
 
+        int diffWithSelectedSize = mIndicatorSelectedSize - mIndicatorSize;
+        int allIndicatorsWidth = mIndicatorSize * mNumOfIndicators + diffWithSelectedSize;
+        int paddingBetweenIndicators = (mNumOfIndicators - 1) * mPaddingBetweenIndicators;
+
         // if width is not wide enough
-        if (mIndicatorSize * mNumOfIndicators + (mNumOfIndicators - 1) * mPaddingBetweenIndicators > width) {
-            width -= mPaddingBetweenIndicators * (mNumOfIndicators - 1);
+        if (allIndicatorsWidth + paddingBetweenIndicators > width) {
+            width -= paddingBetweenIndicators - diffWithSelectedSize;
             mIndicatorSize = width / mNumOfIndicators;
             isIndicatorSizeChanged = true;
         }
@@ -176,25 +188,33 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
     protected void onDraw(Canvas canvas) {
         final int hCenter = (getWidth() - getPaddingLeft() - getPaddingRight()) / 2;
         final int vCenter = (getHeight() - getPaddingTop() - getPaddingBottom()) / 2;
-        mTotalWidthWeNeed = mIndicatorSize * mNumOfIndicators + mPaddingBetweenIndicators * (mNumOfIndicators - 1);
+
+        int diffWithSelectedSize = mIndicatorSelectedSize - mIndicatorSize;
+        int allIndicatorsWidth = mIndicatorSize * mNumOfIndicators + diffWithSelectedSize;
+        int paddingBetweenIndicators = (mNumOfIndicators - 1) * mPaddingBetweenIndicators;
+
+        mTotalWidthWeNeed = allIndicatorsWidth + paddingBetweenIndicators;
         mLeftBound = hCenter - mTotalWidthWeNeed / 2 + getPaddingLeft();
         //mLeftBound = hCenter - mTotalWidthWeNeed / 2 + Math.round(getPaddingLeft() / mDensity);
         mTopBound = vCenter - mIndicatorSize / 2 + getPaddingTop();
+        int topSelectedBound = vCenter - mIndicatorSelectedSize / 2 + getPaddingTop();
         //mTopBound = vCenter - mIndicatorSize / 2 + Math.round(getPaddingTop() / mDensity);
 
         mRect.offsetTo(mLeftBound, mTopBound);
+        mSelectedRect.offsetTo(mLeftBound, topSelectedBound);
         for (int i = 0; i < mNumOfIndicators; i++) {
             if (i != mSelectedIndicator || mSmoothTransitionEnabled) {
                 canvas.drawBitmap(mUnSelectedBitmap, null, mRect, null);
             } else {
-                canvas.drawBitmap(mSelectedBitmap, null, mRect, null);
+                canvas.drawBitmap(mSelectedBitmap, null, mSelectedRect, null);
             }
 
             if (i == mCurrentPosition && mSmoothTransitionEnabled) {
-                mTempRect.set(mRect);
+                mTempRect.set(mSelectedRect);
             }
 
             mRect.offset(mIndicatorSize + mPaddingBetweenIndicators, 0);
+            mSelectedRect.offset(mIndicatorSize + mPaddingBetweenIndicators, 0);
         }
 
         if (mSmoothTransitionEnabled) {
@@ -202,7 +222,6 @@ public class IndicatorsView extends View implements ViewPager.OnPageChangeListen
             mTempRect.offset(offset, 0);
             canvas.drawBitmap(mSelectedBitmap, null, mTempRect, null);
         }
-
     }
 
     @SuppressLint("ClickableViewAccessibility")

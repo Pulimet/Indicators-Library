@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import net.alexandroid.shpref.MyLog;
 import net.alexandroid.utils.indicators.IndicatorsView;
+import net.alexandroid.utils.mylog.MyLog;
 
 public class MainActivity extends AppCompatActivity implements PlaceholderFragment.CategoryFragmentInteractionListener {
 

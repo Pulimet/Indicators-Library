@@ -4,6 +4,7 @@
         <attr name="selectedDrawable" format="reference"/>
         <attr name="unSelectedDrawable" format="reference"/>
         <attr name="indicatorSize" format="dimension"/>
+        <attr name="indicatorSelectedSize" format="dimension"/>
         <attr name="paddingBetweenIndicators" format="dimension"/>
         <attr name="numberOfIndicators" format="integer"/>
         <attr name="selectedIndicator" format="integer"/>

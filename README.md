@@ -16,13 +16,14 @@ repositories {
 }
 
 dependencies {
-    compile 'net.alexandroid.utils:indicators:1.4'
+    compile 'net.alexandroid.utils:indicators:1.5'
 }
 ```
 
 
 
 # Release notes
+* 1.5 - Custom selected indicator size
 * 1.4 - New drawables setters for selected and unselected indicators
 * 1.3 - Wrap content and padding support
 * 1.2 - Smooth indicator change and clickabillity
