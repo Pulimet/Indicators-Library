@@ -16,13 +16,14 @@ repositories {
 }
 
 dependencies {
-    compile 'net.alexandroid.utils:indicators:1.6'
+    compile 'net.alexandroid.utils:indicators:1.7'
 }
 ```
 
 
 
 # Release notes
+* 1.7 - Target 29 + AndroidX
 * 1.6 - Custom selected indicator measurements fix
 * 1.5 - Custom selected indicator size
 * 1.4 - New drawables setters for selected and unselected indicators
