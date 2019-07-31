@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compile 'net.alexandroid.utils:indicators:1.7'
+    implementation 'net.alexandroid.utils:indicators:1.7'
 }
 ```
 
